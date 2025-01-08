@@ -1,7 +1,7 @@
-import { Header } from "@/components/header"
-import { LeftSidebar } from "@/components/left-sidebar"
-import { RightSidebar } from "@/components/right-sidebar"
-import { Feed } from "@/components/feed"
+import { Header } from "@/components/main/header"
+import { LeftSidebar } from "@/components/main/left-sidebar"
+import { RightSidebar } from "@/components/main/right-sidebar"
+import { Feed } from "@/components/main/feed"
 
 export default function Home() {
   return (
