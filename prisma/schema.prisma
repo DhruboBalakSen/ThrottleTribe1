@@ -18,6 +18,7 @@ model User {
   name           String
   username       String    @unique
   email          String    @unique
+  bio            String
   profilePicture String?
   posts          Post[]
   comments       Comment[]
