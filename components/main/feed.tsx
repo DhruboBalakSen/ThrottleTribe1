@@ -35,7 +35,7 @@ const mockPosts = [
 export function Feed() {
   return (
     <div className="flex-1 max-w-2xl mx-auto">
-      <div className="flex gap-2 overflow-x-auto py-4 px-2">
+      {/* <div className="flex gap-2 overflow-x-auto py-4 px-2">
         {[1, 2, 3, 4, 5, 6, 7].map((i) => (
           <div key={i} className="flex flex-col items-center gap-1">
             <img
@@ -46,7 +46,7 @@ export function Feed() {
             <span className="text-xs">User {i}</span>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <Card className="mb-4">
         <CardContent className="p-4">

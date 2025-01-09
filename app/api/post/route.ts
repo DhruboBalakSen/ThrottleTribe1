@@ -7,4 +7,4 @@ export default function handler(req:any, res:any) {
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
     }
-  }
+}
