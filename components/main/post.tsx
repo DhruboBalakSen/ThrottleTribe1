@@ -40,9 +40,6 @@ export function Post({
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
         </div>
         <p className="mb-4">
           {content}

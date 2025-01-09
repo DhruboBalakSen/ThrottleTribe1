@@ -24,7 +24,7 @@ export function LeftSidebar() {
           <nav className="space-y-1">
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Heart className="h-5 w-5 text-orange-500" />
-              Explore Feed
+              My Feed
             </Button>
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Users className="h-5 w-5 text-orange-500" />

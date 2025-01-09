@@ -5,8 +5,8 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Travel Social Platform",
-  description: "Connect with travelers and explore events",
+  title: "ThrottleTribe",
+  description: "Connect with riders and explore events",
 }
 
 export default function RootLayout({
