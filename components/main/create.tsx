@@ -1,16 +1,11 @@
 "use client";
 
-import { Image, SendHorizonal } from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { useRef } from "react";
+import Upload from "./upload";
 
 export default function Create() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleClick = () => {
-    fileInputRef.current?.click();
-  };
   
   return (
     <Card className="mb-4">
@@ -27,10 +22,7 @@ export default function Create() {
             className="flex-1 bg-gray-100 rounded-full px-4"
           />
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon" onClick={handleClick}>
-              <Image className="h-5 w-5" />
-              <input type="file" ref={fileInputRef} className="hidden" />
-            </Button>
+            <Upload />
           </div>
           <div className="flex gap-2">
             <Button variant="ghost" size="icon">

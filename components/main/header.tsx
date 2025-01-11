@@ -2,6 +2,7 @@ import { Search } from 'lucide-react'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { UserButton } from '@clerk/nextjs'
 
 export function Header() {
   return (
@@ -23,14 +24,10 @@ export function Header() {
               className="pl-8"
             />
           </div>
-          <Button variant="ghost" size="icon">🔔</Button>
+          {/* <Button variant="ghost" size="icon">🔔</Button>
           <Button variant="ghost" size="icon">📸</Button>
-          <Button variant="ghost" size="icon">🔖</Button>
-          <img
-            src="default_pfp.jpg"
-            alt="Profile"
-            className="h-8 w-8 rounded-full"
-          />
+          <Button variant="ghost" size="icon">🔖</Button> */}
+          <UserButton />
         </div>
       </div>
     </header>

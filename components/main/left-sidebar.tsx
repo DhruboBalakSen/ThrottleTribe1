@@ -1,7 +1,7 @@
 import { Heart, Users, Grid, Image, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import Link from 'next/link'
 
 export function LeftSidebar() {
   return (
@@ -22,10 +22,12 @@ export function LeftSidebar() {
         </CardHeader>
         <CardContent className="pb-3">
           <nav className="space-y-1">
+            <Link href="/profile/1">
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Heart className="h-5 w-5 text-orange-500" />
-              My Feed
+              My Profile
             </Button>
+            </Link>
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Users className="h-5 w-5 text-orange-500" />
               Friend Requests
