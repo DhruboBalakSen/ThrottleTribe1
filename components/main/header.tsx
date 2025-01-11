@@ -30,7 +30,7 @@ export function Header() {
           <UserButton />
 
           <SignOutButton>
-            <Button variant="ghost">
+            <Button variant="destructive">
             <LogOut />
             </Button>
           </SignOutButton>

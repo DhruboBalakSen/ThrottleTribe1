@@ -28,7 +28,8 @@ export async function POST(request: NextRequest) {
         }
       ).end(buffer);
     });
-
+    console.log("Upload successful");
+    // console.log(result);
     return NextResponse.json({ url: (result as any).secure_url });
   } catch (error) {
     console.error('Upload error:', error);
