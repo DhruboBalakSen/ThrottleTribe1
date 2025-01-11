@@ -1,8 +1,9 @@
-import { Search } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserButton } from "@clerk/nextjs";
+import { SignOutButton } from "@clerk/nextjs";
 
 export function Header() {
   return (
@@ -29,6 +30,11 @@ export function Header() {
             />
           </div>
           <UserButton />
+          <SignOutButton>
+            <Button variant="ghost">
+            <LogOut />
+            </Button>
+          </SignOutButton>
         </div>
       </div>
     </header>

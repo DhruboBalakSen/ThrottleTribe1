@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Login from "@/components/landing/loginpage";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,12 +18,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <SignedOut>
-            <Login />
-          </SignedOut>
-          <SignedIn>
-            <div className="min-h-screen bg-gray-50">{children}</div>
-          </SignedIn>
+          <div className="min-h-screen bg-gray-50">{children}</div>
         </body>
       </html>
     </ClerkProvider>
