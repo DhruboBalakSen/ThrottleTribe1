@@ -55,7 +55,7 @@ export function TripsContent() {
 
             <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
               <img
-                src="https://placehold.co/400x800"
+                src="https://content3.jdmagicbox.com/comp/coorg/i8/9999p8272.8272.170314174644.g3i8/catalogue/top-gear-bike-rentals-kohinoor-road-coorg-bike-on-rent-yamaha-csp580ewh9.jpg"
                 alt="Trip"
                 className="w-full h-full object-cover"
               />

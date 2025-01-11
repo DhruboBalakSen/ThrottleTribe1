@@ -14,7 +14,7 @@ const mockPosts = [
     },
     content:
       "Adipiscing sapien felis in semper porttitor massa senectus nunc. Non ac cursus nisi luctus diam dignissim. Cras tincidunt etiam morbi egestas...",
-    image: "https://placehold.co/600x300",
+    image: "https://stat.overdrive.in/wp-content/odgallery/2022/08/63809_2022_Royal_Enfield_Hunter_350.jpg",
     likes: 10212,
     comments: 238,
     shares: 127,

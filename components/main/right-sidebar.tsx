@@ -17,7 +17,7 @@ export function RightSidebar() {
           <Card key={i}>
             <CardContent className="p-4">
               <img
-                src="https://placehold.co/150x300"
+                src="https://media.assettype.com/fastbikeindia-to-evoindia%2Fimport%2Ffastbikesindia%2F2020-12%2Ff4511879-66d7-4413-a753-cefc07b231de%2FHero_MotoSports_Team_Rally___Sebastian_Buhler__CS_Santosh__and_Joaquim_Rodrigues.jpg?w=1024&auto=format%2Ccompress&fit=max"
                 alt="Event"
                 className="w-full h-40 object-cover rounded-lg mb-4"
               />
