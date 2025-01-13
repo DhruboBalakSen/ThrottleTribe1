@@ -1,6 +1,3 @@
-import { Image, MessageCircle, Share2, Bookmark } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Post } from "./post";
 import Create from "./create";
 import { getPosts } from "@/lib/queries";

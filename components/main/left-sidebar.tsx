@@ -19,13 +19,13 @@ export async function  LeftSidebar() {
             />
             <div>
               <p className="font-medium">{user?.fullName}</p>
-              <p className="text-sm text-muted-foreground">@{user?.fullName?.toLowerCase()}</p>
+              <p className="text-sm text-muted-foreground">@{user?.username}</p>
             </div>
           </div>
         </CardHeader>
         <CardContent className="pb-3">
           <nav className="space-y-1">
-            <Link href="/profile/1">
+            <Link href ={`/profile/${user?.username}`}>
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Heart className="h-5 w-5 text-orange-500" />
               My Profile

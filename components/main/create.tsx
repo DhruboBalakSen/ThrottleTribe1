@@ -10,7 +10,36 @@ export default function Create() {
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [newUrl, setNewUrl] = useState("");
+  const [content, setContent] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleContent = (e : React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const newValue = String(e.target.value)
+    setContent(newValue)
+  }
+
+  const createPost = async () =>{
+    const formData = new FormData();
+    formData.append("content", content);
+    formData.append("imageUrl", newUrl);
+    try {
+      const response = await fetch("/api/post", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Posted successfully!");
+        return;
+      } else {
+        throw new Error(data.error || "Post failed");
+      }
+    } catch (error) {
+      console.log("Post failed");
+      return null;
+    }
+  }
 
   const handleFileInput = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -73,6 +102,7 @@ export default function Create() {
             type="text"
             placeholder="Share your experiences..."
             className="flex-1 bg-gray-100 rounded-full px-4"
+            onChange = {handleContent}
           />
           <div className="flex gap-2">
             <Button variant="ghost" size="icon" onClick={handleClick}>
@@ -88,7 +118,7 @@ export default function Create() {
             </Button>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon" disabled={isUploading}>
+            <Button variant="ghost" size="icon" disabled={isUploading} onClick={createPost}>
               <SendHorizonal className="h-5 w-5" />
             </Button>
           </div>
