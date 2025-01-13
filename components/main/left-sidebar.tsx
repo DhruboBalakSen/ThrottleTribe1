@@ -2,21 +2,24 @@ import { Heart, Users, Grid, Image, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
+import { currentUser } from '@clerk/nextjs/server'
 
-export function LeftSidebar() {
+export async function  LeftSidebar() {
+  const user = await currentUser();
+  // console.log(user)
   return (
     <div className="hidden lg:flex flex-col gap-6 w-64">
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <img
-              src="default_pfp.jpg"
+              src={user?.imageUrl || "default_pfp.jpg"}
               alt="Profile"
               className="h-10 w-10 rounded-full"
             />
             <div>
-              <p className="font-medium">Samay Panchal</p>
-              <p className="text-sm text-muted-foreground">@samaypanchal</p>
+              <p className="font-medium">{user?.fullName}</p>
+              <p className="text-sm text-muted-foreground">@{user?.fullName?.toLowerCase()}</p>
             </div>
           </div>
         </CardHeader>

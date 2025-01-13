@@ -37,7 +37,6 @@ export default function Create() {
   const uploadToServer = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-
     try {
       const response = await fetch("/api/upload", {
         method: "POST",

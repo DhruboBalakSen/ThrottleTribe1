@@ -11,10 +11,9 @@ export default function Page() {
           src="/login.jpg"
           alt="ThrottleTribe Welcome"
           layout="fill"
-          objectFit="cover"
-          className="mix-blend-darken rounded-r-3xl"
+          className="mix-blend-darken object-cover rounded-r-3xl"
         />
-        <h1 className="relative z-10 text-4xl font-bold text-white text-center">
+        <h1 className="relative z-10 text-5xl font-bold text-white text-center">
           Welcome to ThrottleTribe
         </h1>
       </div>
