@@ -33,36 +33,35 @@ export const createUser = async (data: {
       profilePicture: data.profilePicture,
     },
   });
-  return "User created successfully";
+  return user;
 };
 
-
 export const getPosts = async () => {
-    const posts = await prisma.post.findMany({
-        orderBy : {
-            createdAt : 'desc'
-        }
-    })
-    return posts
-}
+  const posts = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return posts;
+};
 
 export const getUserPosts = async (id: number) => {
-    const posts = await prisma.post.findMany({
-        where : {
-            userId : id
-        },
-        orderBy :{
-            createdAt : 'desc'
-        }
-    })
-    return posts
-}
+  const posts = await prisma.post.findMany({
+    where: {
+      userId: id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return posts;
+};
 
 export const getUserDetails = async (id: number) => {
   const user = await prisma.user.findUnique({
-    where : {
-      id: id
-    }
-  })
+    where: {
+      id: id,
+    },
+  });
   return user;
-} 
+};
