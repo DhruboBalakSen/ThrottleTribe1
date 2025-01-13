@@ -65,4 +65,4 @@ export const getUserDetails = async (id: number) => {
     }
   })
   return user;
-}
+} 

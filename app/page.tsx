@@ -2,8 +2,10 @@ import { Header } from "@/components/main/header"
 import { LeftSidebar } from "@/components/main/left-sidebar"
 import { RightSidebar } from "@/components/main/right-sidebar"
 import { Feed } from "@/components/main/feed"
+import { currentUser } from "@clerk/nextjs/server"
 
-export default function Home() {
+export default async function Home() {
+
   return (
     <div className="bg-gray-50">
       <Header />
