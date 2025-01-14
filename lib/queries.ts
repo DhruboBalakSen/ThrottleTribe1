@@ -1,7 +1,7 @@
 import prisma from "./db";
 
 export const createPost = async (data: {
-  userid: number;
+  userid: string;
   content: string;
   imageUrl: string;
 }) => {
@@ -37,18 +37,20 @@ export const createUser = async (data: {
 };
 
 export const getPosts = async () => {
-  const posts = await prisma.post.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return posts;
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return posts;
+  } catch (error) {}
 };
 
-export const getUserPosts = async (id: number) => {
+export const getUserPosts = async (username: string) => {
   const posts = await prisma.post.findMany({
     where: {
-      userId: id,
+      userId: username,
     },
     orderBy: {
       createdAt: "desc",
@@ -57,11 +59,40 @@ export const getUserPosts = async (id: number) => {
   return posts;
 };
 
-export const getUserDetails = async (id: number) => {
+export const getUserDetails = async (username: string) => {
   const user = await prisma.user.findUnique({
     where: {
-      id: id,
+      username: username,
     },
   });
   return user;
 };
+
+export const updatePost = async(id: number,content: string) => {
+  try {
+    await prisma.post.update({
+      where :{
+        id : id
+      },
+      data :{
+        content : content
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return "Unable to update"
+  }
+}
+
+export const deletePost = async(id: number) => {
+  try {
+    await prisma.post.delete({
+      where :{
+        id : id
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return "Unable to delete"
+  }
+}

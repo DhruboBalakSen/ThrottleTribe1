@@ -5,8 +5,10 @@ import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import { useUser } from "@clerk/nextjs";
 
 export default function Create() {
+  const {user} = useUser()
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [newUrl, setNewUrl] = useState("");
@@ -21,6 +23,7 @@ export default function Create() {
 
   const createPost = async () =>{
     const formData = new FormData();
+    formData.append("userId",user?.username || "")
     formData.append("content", content);
     formData.append("imageUrl", newUrl);
     try {
@@ -94,7 +97,7 @@ export default function Create() {
       <CardContent className="p-4">
         <div className="flex gap-2">
           <img
-            src="default_pfp.jpg"
+            src={user?.imageUrl || "default_pfp.jpg"}
             alt="Profile"
             className="h-10 w-10 rounded-full"
           />

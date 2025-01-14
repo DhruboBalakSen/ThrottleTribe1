@@ -1,5 +1,12 @@
 interface PostParams {
-  userId: number;
+  id: number,
+  userId: string;
   content: string | null;
   imageUrl: string | null;
 }
+
+type UserProfileProps = {
+
+  username: { username: string };
+
+};
