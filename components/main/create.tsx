@@ -6,6 +6,7 @@ import { Card, CardContent } from "../ui/card";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function Create() {
   const {user} = useUser()
@@ -13,6 +14,7 @@ export default function Create() {
   const [isUploading, setIsUploading] = useState(false);
   const [newUrl, setNewUrl] = useState("");
   const [content, setContent] = useState("");
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleContent = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +36,9 @@ export default function Create() {
       const data = await response.json();
       if (response.ok) {
         toast.success("Posted successfully!");
+        router.refresh()
+        setNewUrl("")
+        setContent("")
         return;
       } else {
         throw new Error(data.error || "Post failed");
@@ -105,6 +110,7 @@ export default function Create() {
             type="text"
             placeholder="Share your experiences..."
             className="flex-1 bg-gray-100 rounded-full px-4"
+            value={content}
             onChange = {handleContent}
           />
           <div className="flex gap-2">

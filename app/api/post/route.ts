@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createPost } from "@/lib/queries";
+import { createPost,deletePost } from "@/lib/queries";
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,9 +13,30 @@ export async function POST(request: NextRequest) {
     console.log(result)
     return NextResponse.json({message:"Post Created"},{status:200})
   } catch (error) {
-    console.error("Unable to post: ", error);
+    console.error("Unable to create post: ", error);
     return NextResponse.json(
       { error: "Unable to create post" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest){
+  try {
+    const formData= await request.formData();
+    const postId = Number(formData.get("id"));
+    if(!postId){
+      return NextResponse.json(
+        { message: "Invalid postId" },
+        { status: 400 }
+      )
+    }
+    await deletePost(postId);
+    return NextResponse.json({message: "User deleted Successfully"},{status: 200})
+  } catch (error) {
+    console.error("Unable to delete post: ", error);
+    return NextResponse.json(
+      { error: "Unable to delete post" },
       { status: 500 }
     );
   }

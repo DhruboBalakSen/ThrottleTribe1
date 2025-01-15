@@ -44,7 +44,9 @@ export const getPosts = async () => {
       },
     });
     return posts;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getUserPosts = async (username: string) => {
