@@ -45,7 +45,8 @@ export const getPosts = async () => {
     });
     return posts;
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    return [];
   }
 };
 
@@ -70,31 +71,65 @@ export const getUserDetails = async (username: string) => {
   return user;
 };
 
-export const updatePost = async(id: number,content: string) => {
+export const updatePost = async (id: number, content: string) => {
   try {
     await prisma.post.update({
-      where :{
-        id : id
+      where: {
+        id: id,
       },
-      data :{
-        content : content
-      }
-    })
+      data: {
+        content: content,
+      },
+    });
   } catch (error) {
-    console.log(error)
-    return "Unable to update"
+    console.log(error);
+    return "Unable to update";
   }
-}
+};
 
-export const deletePost = async(id: number) => {
+export const deletePost = async (id: number) => {
   try {
     await prisma.post.delete({
-      where :{
-        id : id
-      }
-    })
+      where: {
+        id: id,
+      },
+    });
   } catch (error) {
-    console.log(error)
-    return "Unable to delete"
+    console.log(error);
+    return "Unable to delete";
   }
-}
+};
+
+export const updateBio = async (username: string, newBio: string) => {
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        bio: newBio,
+      },
+    });
+    console.log("Updated bio");
+    return updatedUser;
+  } catch (error) {
+    console.error(error);
+    return "Unable to update bio";
+  }
+};
+
+export const getPostById = async (id: number) => {
+  try {
+    if (!id) {
+      return null;
+    }
+    const post = await prisma.post.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
+};

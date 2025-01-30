@@ -2,9 +2,10 @@ import { Heart, Users, Grid, Image, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
-import { currentUser } from '@clerk/nextjs/server'
+import { currentUser,auth } from '@clerk/nextjs/server'
 
 export async function  LeftSidebar() {
+  await auth();
   const user = await currentUser();
   // console.log(user)
   return (

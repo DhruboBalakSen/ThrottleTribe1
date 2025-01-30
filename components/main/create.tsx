@@ -37,8 +37,8 @@ export default function Create() {
       if (response.ok) {
         toast.success("Posted successfully!");
         router.refresh()
-        setNewUrl("")
         setContent("")
+        setUploadedFiles([]);
         return;
       } else {
         throw new Error(data.error || "Post failed");

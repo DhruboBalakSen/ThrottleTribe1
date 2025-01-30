@@ -1,14 +1,9 @@
-import { MessageCircle, Share2, Bookmark, MoreVertical } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getUserDetails } from "@/lib/queries";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../ui/dropdown-menu";
 import { currentUser } from "@clerk/nextjs/server";
+import PostOption from "./postOption";
 
 export async function Post({ id, userId, content, imageUrl }: PostParams) {
   const currentuser = await currentUser();
@@ -29,19 +24,7 @@ export async function Post({ id, userId, content, imageUrl }: PostParams) {
             </div>
           </div>
           {userId === currentuser?.username &&
-            <DropdownMenu>
-              <DropdownMenuTrigger className="h-6 w-6 flex justify-center items-center">
-                  <MoreVertical className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                    Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>}
+            <PostOption id={id}/>}
         </div>
         <p className="mb-4">{content}</p>
         <img
@@ -52,11 +35,11 @@ export async function Post({ id, userId, content, imageUrl }: PostParams) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" className="gap-2">
-              ❤️ {1024}
+              ❤️ {10}
             </Button>
             <Button variant="ghost" size="sm" className="gap-2">
               <MessageCircle className="h-4 w-4" />
-              {1024}
+              {0}
             </Button>
           </div>
         </div>
