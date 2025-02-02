@@ -7,7 +7,19 @@ import toast, { Toaster } from "react-hot-toast";
 import { Card, CardContent } from "../ui/card";
 import { useRouter } from "next/navigation";
 
-function PostEdit({ post, user }) {
+interface Post {
+  id: string;
+  content: string;
+  imageUrl?: string;
+}
+
+interface User {
+  profilePicture?: string;
+  name: string;
+  username: string;
+}
+
+function PostEdit({ post, user }: { post: Post; user: User }) {
   const [content, setContent] = useState(post?.content || "");
   const router = useRouter();
   const handleCancel = () => {
@@ -29,6 +41,7 @@ function PostEdit({ post, user }) {
     }
   };
   return (
+    <div className="mx-4">
     <Card className="mb-4">
       <Toaster position="top-right" />
       <CardContent className="p-4">
@@ -76,6 +89,7 @@ function PostEdit({ post, user }) {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
 

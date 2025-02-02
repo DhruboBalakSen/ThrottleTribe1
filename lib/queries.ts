@@ -133,3 +133,50 @@ export const getPostById = async (id: number) => {
     console.log(error);
   }
 };
+
+export const toggleLike = async (postId: number, userId: string) => {
+  try {
+    if (!postId || !userId) {
+      console.error("Invalid postId or userId:", { postId, userId });
+      return null;
+    }
+
+    const existingLike = await prisma.like.findMany({
+      where: { userId: userId, postId: postId },
+    });
+    console.log(existingLike);
+
+    if (existingLike.length == 0) {
+      const newLike = await prisma.like.create({
+        data: {
+          userId,
+          postId,
+        },
+      });
+      return newLike;
+    } else {
+      await prisma.like.delete({
+        where: { id: existingLike[0].id },
+      });
+      return { message: "Like removed" };
+    }
+  } catch (error) {
+    console.error("Error toggling like:", error);
+    return "Unable to toggle like";
+  }
+};
+
+export const getLikeCount = async (postId: number) => {
+  try {
+    const likes = await prisma.like.count({
+      where: {
+        postId,
+      },
+    });
+    return likes;
+  } catch (error) {
+    console.error("Error getting like count:", error);
+    return "Unable to get like count";
+  }
+};
+
