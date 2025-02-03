@@ -9,8 +9,8 @@ export async function  LeftSidebar() {
   const user = await currentUser();
   // console.log(user)
   return (
-    <div className="hidden lg:flex flex-col gap-6 w-64">
-      <Card>
+    <div className="hidden lg:flex flex-col gap-4 w-96">
+      <Card className='shadow-md'>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <img
@@ -36,19 +36,19 @@ export async function  LeftSidebar() {
               <Users className="h-5 w-5 text-orange-500" />
               Friend Requests
             </Button>
-            <Button variant="ghost" className="w-full justify-start gap-2">
+            {/* <Button variant="ghost" className="w-full justify-start gap-2">
               <Grid className="h-5 w-5 text-orange-500" />
               Groups
             </Button>
             <Button variant="ghost" className="w-full justify-start gap-2">
               <Image className="h-5 w-5 text-orange-500" />
               Memories
-            </Button>
+            </Button> */}
           </nav>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='shadow-md'>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium flex justify-between items-center">
             People you may know

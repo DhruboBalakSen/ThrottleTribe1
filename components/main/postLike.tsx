@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Divide, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import axios from "axios";
 
 interface Props {
@@ -22,8 +22,9 @@ function PostLike({ id, userId }: Props) {
   const fetchLikes = async () => {
     const likesResponse = await axios.get(`/api/post/like?postId=${id}`);
     const likes = likesResponse.data.likes;
-    setLikes(likes);
-    console.log(likes)
+    setLikes(likes.length || 0);
+    const userIds: string[] = likes.map((like: { userId: string }) => like.userId);
+    setLiked(userIds.includes(userId));
   };
 
   const handleLike = async () => {

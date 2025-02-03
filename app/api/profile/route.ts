@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateBio } from "@/lib/queries";
+import { getUserDetails, updateBio } from "@/lib/queries";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,5 +13,17 @@ export async function POST(request: NextRequest) {
       { error: "Unable to update bio" },
       { status: 500 }
     );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId') as string;
+    const user = await getUserDetails(userId)
+    return NextResponse.json({ user }, { status: 200 });
+
+  } catch (error) {
+    
   }
 }

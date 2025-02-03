@@ -60,7 +60,7 @@ function Bio(dbUser: Props) {
               Save
             </Button>
             <Button
-              className="bg-gray-300 hover:bg-gray-400"
+              variant="outline"
               onClick={handleCancelEdit}
             >
               Cancel

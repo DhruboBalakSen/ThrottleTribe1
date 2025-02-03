@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 
 export function TripsRightbar() {
   return (
-    <div className="hidden xl:flex flex-col gap-6 w-80">
+    <div className="hidden xl:flex flex-col gap-4 w-80">
       <div className="flex items-center justify-between">
         <h3 className="font-medium">Nearest Trips</h3>
         <Button variant="ghost" size="icon" className="h-10 w-12">

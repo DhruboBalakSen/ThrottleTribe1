@@ -4,14 +4,15 @@ import { getUserDetails, getUserPosts } from "@/lib/queries";
 import { Post } from "../main/post";
 import { Toaster } from "react-hot-toast";
 import Bio from "./bio";
+import LeftMenu from "./leftMenu";
 
 export async function UserProfile() {
   const user = await currentUser();
   const dbUser = user?.username ? await getUserDetails(user.username) : null;
   const posts = dbUser?.username ? await getUserPosts(dbUser.username) : [];
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div className="max-w-7xl mx-auto flex flex-col">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
         {dbUser && (
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <Toaster position="top-right" />
@@ -32,6 +33,8 @@ export async function UserProfile() {
           </div>
         )}
       </div>
+      <div className="flex gap-4">
+      <LeftMenu />
       {posts.length > 0 ? (
         <div className="space-y-6">
           {posts && posts.map((post) => <Post key={post.id} {...post} />)}
@@ -41,6 +44,7 @@ export async function UserProfile() {
           <p className="text-gray-500 text-center">No posts yet.</p>
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -16,7 +16,6 @@ export default function OnboardingComponent() {
   const handleSubmit = async (formData: FormData) => {
     const res = await completeOnboarding(formData);
     if (res?.message) {
-      // Reloads the user's data from the Clerk API
       await user?.reload();
       router.push("/");
     }
@@ -51,7 +50,7 @@ export default function OnboardingComponent() {
                 required
               />
               <p className="mt-2 text-sm text-gray-500">
-                Brief description for your profile. URLs are hyperlinked.
+                Brief description for your profile.
               </p>
             </div>
             {error && <p className="text-red-600">Error: {error}</p>}

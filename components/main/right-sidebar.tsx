@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react"
 
 export function RightSidebar() {
   return (
-    <div className="hidden xl:flex flex-col gap-6 w-80">
+    <div className="hidden xl:flex flex-col gap-6 w-96">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-medium">Upcoming Events</h3>
@@ -14,7 +14,7 @@ export function RightSidebar() {
         </Button>
         </div>
         {[1, 2].map((i) => (
-          <Card key={i}>
+          <Card className='shadow-md' key={i}>
             <CardContent className="p-4">
               <img
                 src="https://media.assettype.com/fastbikeindia-to-evoindia%2Fimport%2Ffastbikesindia%2F2020-12%2Ff4511879-66d7-4413-a753-cefc07b231de%2FHero_MotoSports_Team_Rally___Sebastian_Buhler__CS_Santosh__and_Joaquim_Rodrigues.jpg?w=1024&auto=format%2Ccompress&fit=max"

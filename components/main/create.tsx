@@ -98,7 +98,7 @@ export default function Create() {
   };
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 shadow-md">
       <CardContent className="p-4">
         <div className="flex gap-2">
           <img

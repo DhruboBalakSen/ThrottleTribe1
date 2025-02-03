@@ -166,9 +166,9 @@ export const toggleLike = async (postId: number, userId: string) => {
   }
 };
 
-export const getLikeCount = async (postId: number) => {
+export const getLikes = async (postId: number) => {
   try {
-    const likes = await prisma.like.count({
+    const likes = await prisma.like.findMany({
       where: {
         postId,
       },
@@ -180,3 +180,51 @@ export const getLikeCount = async (postId: number) => {
   }
 };
 
+export const createComment = async (
+  postId: number,
+  userId: string,
+  commentText: string
+) => {
+  try {
+    const comment = await prisma.comment.create({
+      data: {
+        postId: postId,
+        userId: userId,
+        commentText: commentText,
+      },
+    });
+    return comment;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    return "Unable to create comment";
+  }
+};
+
+export const getComments = async (postId: number) => {
+  try {
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId: postId,
+      },
+    });
+    return comments;
+  } catch (error) {
+    console.error("Error getting comments:", error);
+    return "Unable to get comments";
+  }
+};
+
+
+export const deleteComment = async (id: number) => {
+  try {
+    await prisma.comment.delete({
+      where: {
+        id: id,
+      },
+    });
+    return "Comment deleted successfully";
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return "Unable to delete comment";
+  }
+}

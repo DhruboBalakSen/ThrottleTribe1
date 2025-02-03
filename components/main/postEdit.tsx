@@ -23,7 +23,8 @@ function PostEdit({ post, user }: { post: Post; user: User }) {
   const [content, setContent] = useState(post?.content || "");
   const router = useRouter();
   const handleCancel = () => {
-    setContent(post?.content || ""); // Reset to original bio
+    setContent(post?.content || "");
+    router.push("/")
   };
   const handleSave = async () => {
     try {

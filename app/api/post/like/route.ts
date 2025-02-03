@@ -1,5 +1,4 @@
-import prisma from "@/lib/db";
-import { getLikeCount, toggleLike } from "@/lib/queries";
+import { getLikes, toggleLike } from "@/lib/queries";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
         const postId = Number(searchParams.get('postId'));
-        const likes = await getLikeCount(postId);
+        const likes = await getLikes(postId);
         return NextResponse.json({ likes }, { status: 200 });
     } catch (error) {
         console.error("Error getting like count:", error);
