@@ -22,6 +22,9 @@ export const createUser = async (data: {
   phoneNumber: string;
   bio: string;
   profilePicture: string;
+  gender: string;
+  dob: string;
+  location: string;
 }) => {
   const user = await prisma.user.create({
     data: {
@@ -31,6 +34,9 @@ export const createUser = async (data: {
       phoneNumber: data.phoneNumber,
       bio: data.bio,
       profilePicture: data.profilePicture,
+      gender: data.gender,
+      dob: data.dob,
+      location: data.location,
     },
   });
   return user;
@@ -45,7 +51,6 @@ export const getPosts = async () => {
     });
     return posts;
   } catch (error) {
-    // console.log(error)
     return [];
   }
 };
@@ -144,7 +149,6 @@ export const toggleLike = async (postId: number, userId: string) => {
     const existingLike = await prisma.like.findMany({
       where: { userId: userId, postId: postId },
     });
-    console.log(existingLike);
 
     if (existingLike.length == 0) {
       const newLike = await prisma.like.create({
@@ -210,10 +214,9 @@ export const getComments = async (postId: number) => {
     return comments;
   } catch (error) {
     console.error("Error getting comments:", error);
-    return "Unable to get comments";
+    return [];
   }
 };
-
 
 export const deleteComment = async (id: number) => {
   try {
@@ -227,4 +230,219 @@ export const deleteComment = async (id: number) => {
     console.error("Error deleting comment:", error);
     return "Unable to delete comment";
   }
+};
+
+export const toggleFollow = async (senderId: string, receiverId: string) => {
+  try {
+    if (!senderId || !receiverId) {
+      console.error("Invalid postId or userId:", { senderId, receiverId });
+      return null;
+    }
+
+    const existingFollow = await prisma.follow.findMany({
+      where: { followingId: receiverId, followerId: senderId },
+    });
+    console.log();
+
+    if (existingFollow.length == 0) {
+      const newFollow = await prisma.follow.create({
+        data: {
+          followerId: senderId,
+          followingId: receiverId,
+        },
+      });
+      return newFollow;
+    } else {
+      await prisma.follow.delete({
+        where: { id: existingFollow[0].id },
+      });
+      return { message: "Follow removed" };
+    }
+  } catch (error) {
+    console.error("Error toggling Follow:", error);
+    return "Unable to toggle Follow";
+  }
+};
+
+export const getFollow = async (username: string) => {
+  try {
+    const followers = await prisma.follow.findMany({
+      where: { followingId: username },
+      include: { follower: true },
+    });
+
+    const following = await prisma.follow.findMany({
+      where: { followerId: username },
+      include: { following: true },
+    });
+    const followersCount = await prisma.follow.count({
+      where: { followingId: username },
+    });
+
+    const followingCount = await prisma.follow.count({
+      where: { followerId: username },
+    });
+    return [followers, following, followersCount, followingCount];
+  } catch (error) {
+    console.error("Error fetching Follow:", error);
+    return "Unable to fetch Follow";
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: {
+        id: "desc",
+      },
+    });
+    return users;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const createBlog = async (
+  title: string,
+  author: string,
+  content: string,
+  tags: string[],
+  imageUrl: string
+) => {
+  try {
+    const blog = await prisma.blogs.create({
+      data: {
+        title: title,
+        author: author,
+        content: content,
+        tags: tags,
+        imageUrl: imageUrl,
+      },
+    });
+    return blog;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getBlogs = async () => {
+  try {
+    const blogs = await prisma.blogs.findMany();
+    return blogs;
+  } catch (error) {}
+};
+export const getBlog = async (id: number) => {
+  try {
+    const blog = await prisma.blogs.findFirst({
+      where: {
+        id: id,
+      },
+    });
+    return blog;
+  } catch (error) {}
+};
+
+export const updateBlog = async (
+  blogId: number,
+  data: Partial<{
+    title: string;
+    content: string;
+    tags: string[];
+    imageUrl: string;
+  }>
+) => {
+  try {
+    const updatedBlog = await prisma.blogs.update({
+      where: { id: blogId },
+      data,
+    });
+    return updatedBlog;
+  } catch (error) {
+    console.error("Error updating blog:", error);
+  }
+};
+
+export const getBlogByAuthor = async (author: string) => {
+  try {
+    const blog = await prisma.blogs.findMany({
+      where: {
+        author: author,
+      },
+    });
+    return blog;
+  } catch (error) {}
+};
+
+
+export const createBlogComment = async (id:number,userId: string,commentText:string) => {
+  try {
+    const comment = await prisma.blogComment.create({
+      data :{
+        blogId:id,
+        userId : userId,
+        commentText : commentText
+      }
+    })
+    return comment;
+  } catch (error) {
+    
+  }
 }
+
+export const getBlogComments = async (id:number) =>{
+  try {
+    const comments = prisma.blogComment.findMany({
+      where :{
+        blogId:id
+      }
+    })
+    return comments;
+  } catch (error) {
+    
+  }
+}
+
+export const toggleBlogLike = async (blogId: number, userId: string) => {
+  try {
+    if (!blogId || !userId) {
+      console.error("Invalid postId or userId:", { blogId, userId });
+      return null;
+    }
+
+    const existingLike = await prisma.blogLikes.findMany({
+      where: { userId: userId, blogId: blogId },
+    });
+
+    if (existingLike.length == 0) {
+      const newLike = await prisma.blogLikes.create({
+        data: {
+          userId,
+          blogId,
+        },
+      });
+      return newLike;
+    } else {
+      await prisma.blogLikes.delete({
+        where: { id: existingLike[0].id },
+      });
+      return { message: "Like removed" };
+    }
+  } catch (error) {
+    console.error("Error toggling like:", error);
+    return "Unable to toggle like";
+  }
+};
+
+export const getBlogLikes = async (blogId: number) => {
+  try {
+    const likes = await prisma.blogLikes.findMany({
+      where: {
+        blogId,
+      },
+    });
+    return likes;
+  } catch (error) {
+    console.error("Error getting like count:", error);
+    return "Unable to get like count";
+  }
+};

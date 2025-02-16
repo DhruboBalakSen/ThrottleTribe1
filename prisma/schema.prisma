@@ -14,18 +14,27 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
+  id             String        @id @default(uuid())
   name           String
-  username       String    @unique
-  email          String    @unique
-  phoneNumber    String    
-  follower       Int       @default(0)
-  following      Int       @default(0)
+  username       String        @unique
+  email          String        @unique
+  phoneNumber    String
   bio            String
+  gender         String
+  dob            String
+  location       String
+  createdAt      DateTime      @default(now())
   profilePicture String?
   posts          Post[]
   comments       Comment[]
   likes          Like[]
+  trips          Trips[]
+  blogs          Blogs[]
+  blogLikes      BlogLikes[]
+  blogComment    BlogComment[]
+
+  followers Follow[] @relation("FollowedBy")
+  following Follow[] @relation("Following")
 }
 
 model Post {
@@ -51,9 +60,64 @@ model Comment {
 
 model Like {
   id        Int      @id @default(autoincrement())
-  userId    String   
-  postId    Int      
+  userId    String
+  postId    Int
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [username])
   post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [username])
+  following User @relation("FollowedBy", fields: [followingId], references: [username])
+
+  @@unique([followerId, followingId]) // Ensures a user cannot follow the same person twice
+}
+
+model Trips {
+  id        Int    @id @default(autoincrement())
+  userId    String
+  itinerary String
+  amenities String
+  start     String
+  end       String
+  cost      String
+  user      User   @relation(fields: [userId], references: [username])
+}
+
+model Blogs {
+  id        Int           @id @default(autoincrement())
+  title     String
+  author    String
+  content   String
+  createdAt DateTime      @default(now())
+  tags      String[]
+  imageUrl  String
+  likes     BlogLikes[]
+  comments  BlogComment[]
+  user      User          @relation(fields: [author], references: [username])
+}
+
+model BlogLikes {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  blogId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [username])
+  blog      Blogs    @relation(fields: [blogId], references: [id])
+}
+
+model BlogComment {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  blogId      Int
+  commentText String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [username])
+  blog        Blogs    @relation(fields: [blogId], references: [id])
 }

@@ -3,11 +3,9 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import PostLike from "./postLike";
 import { useState, useEffect } from "react";
-import { Textarea } from "../ui/textarea";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import PostComment from "./postComment";
+import { Toaster } from "react-hot-toast";
 
 interface Props {
   id: number;
@@ -39,7 +37,7 @@ function PostActions({ id, userId }: Props) {
   return (
     <div className="flex items-center justify-between">
       <Toaster position="top-right" />
-      
+
       <div className="flex items-center gap-4">
         <PostLike id={id} userId={userId} />
         <Button

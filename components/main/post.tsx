@@ -6,6 +6,7 @@ import PostActions from "./postActions";
 import Link from "next/link";
 
 export async function Post({ id, userId, content, imageUrl }: PostParams) {
+  await auth();
   const currentuser = await currentUser();
   const user = await getUserDetails(userId);
   return (
@@ -18,10 +19,10 @@ export async function Post({ id, userId, content, imageUrl }: PostParams) {
               alt="Profile"
               className="h-10 w-10 rounded-full"
             />
-            <div>
+            <Link href={`/profile/${user?.username}`}>
               <p className="font-medium">{user?.name}</p>
               <p className="text-sm text-muted-foreground">@{user?.username}</p>
-            </div>
+            </Link>
           </div>
           {userId === currentuser?.username && <PostOption id={id} />}
         </div>

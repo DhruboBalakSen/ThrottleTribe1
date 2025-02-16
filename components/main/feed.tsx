@@ -7,9 +7,7 @@ export async function Feed() {
   return (
     <div className="flex-1 max-w-[44rem] mx-auto">
       <Create />
-      {posts && posts.map((post) => (
-        <Post key={post.id} {...post} />
-      ))}
+      {posts && posts.map((post) => <Post key={post.id} {...post} />)}
     </div>
   );
 }

@@ -17,28 +17,26 @@ function Bio(dbUser: Props) {
   };
 
   const handleSaveBio = async () => {
-    // Call an API or mutation to save the updated bio to the database
-    // For example: await updateUserBio(bio);
     try {
-        const username = dbUser.username
-        const res = await axios.post("/api/profile" ,{username : username, bio: bio})
-        if (res.status === 200) {
-            toast.success("Updated bio Successfully");
-          } else {
-            toast.error("Failed to update Bio");
-            handleCancelEdit();
-          }
-    } catch (error) {
-        
-    }
+      const username = dbUser.username;
+      const res = await axios.post("/api/profile", {
+        username: username,
+        bio: bio,
+      });
+      if (res.status === 200) {
+        toast.success("Updated bio Successfully");
+      } else {
+        toast.error("Failed to update Bio");
+        handleCancelEdit();
+      }
+    } catch (error) {}
 
     setIsEditingBio(false);
-    // Optionally show a toast notification
   };
 
   const handleCancelEdit = () => {
     setIsEditingBio(false);
-    setBio(dbUser.bio || ""); // Reset to original bio
+    setBio(dbUser.bio || "");
   };
   return (
     <>
@@ -59,10 +57,7 @@ function Bio(dbUser: Props) {
             >
               Save
             </Button>
-            <Button
-              variant="outline"
-              onClick={handleCancelEdit}
-            >
+            <Button variant="outline" onClick={handleCancelEdit}>
               Cancel
             </Button>
           </div>

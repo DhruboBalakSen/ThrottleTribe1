@@ -9,7 +9,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 export default function Create() {
-  const {user} = useUser()
+  const { user } = useUser();
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [newUrl, setNewUrl] = useState("");
@@ -17,15 +17,15 @@ export default function Create() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleContent = (e : React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const newValue = String(e.target.value)
-    setContent(newValue)
-  }
+  const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const newValue = String(e.target.value);
+    setContent(newValue);
+  };
 
-  const createPost = async () =>{
+  const createPost = async () => {
     const formData = new FormData();
-    formData.append("userId",user?.username || "")
+    formData.append("userId", user?.username || "");
     formData.append("content", content);
     formData.append("imageUrl", newUrl);
     try {
@@ -36,8 +36,8 @@ export default function Create() {
       const data = await response.json();
       if (response.ok) {
         toast.success("Posted successfully!");
-        router.refresh()
-        setContent("")
+        router.refresh();
+        setContent("");
         setUploadedFiles([]);
         return;
       } else {
@@ -47,7 +47,7 @@ export default function Create() {
       console.log("Post failed");
       return null;
     }
-  }
+  };
 
   const handleFileInput = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -111,7 +111,7 @@ export default function Create() {
             placeholder="Share your experiences..."
             className="flex-1 bg-gray-100 rounded-full px-4"
             value={content}
-            onChange = {handleContent}
+            onChange={handleContent}
           />
           <div className="flex gap-2">
             <Button variant="ghost" size="icon" onClick={handleClick}>
@@ -127,7 +127,12 @@ export default function Create() {
             </Button>
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" size="icon" disabled={isUploading} onClick={createPost}>
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled={isUploading}
+              onClick={createPost}
+            >
               <SendHorizonal className="h-5 w-5" />
             </Button>
           </div>

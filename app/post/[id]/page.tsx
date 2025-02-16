@@ -14,4 +14,5 @@ const Page = async ({params} : {params : Promise<{id: number}>}) => {
   )
 }
 
+
 export default Page

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
 import { ScrollArea } from "../ui/scroll-area";
-import { MoreHorizontal, MoreVertical, SendHorizonal, X } from "lucide-react";
+import { SendHorizonal, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { toast, Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";

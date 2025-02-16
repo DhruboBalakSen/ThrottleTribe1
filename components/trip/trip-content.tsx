@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Edit3, MoreVertical } from 'lucide-react'
+} from "@/components/ui/select";
+import { Edit3, MoreVertical } from "lucide-react";
 
 export function TripsContent() {
   return (
@@ -65,16 +65,24 @@ export function TripsContent() {
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold">Coorg Bike Trip</h2>
                 <div className="flex gap-2">
-                  <span className="px-2 py-1 text-xs bg-gray-100 rounded">12 JUL</span>
-                  <span className="px-2 py-1 text-xs bg-gray-100 rounded">18 JUL</span>
-                  <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded">3D/2N</span>
+                  <span className="px-2 py-1 text-xs bg-gray-100 rounded">
+                    12 JUL
+                  </span>
+                  <span className="px-2 py-1 text-xs bg-gray-100 rounded">
+                    18 JUL
+                  </span>
+                  <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded">
+                    3D/2N
+                  </span>
                 </div>
               </div>
 
               <p className="text-muted-foreground">
-                Gear up for an adventurous ride to the lush hills of Coorg! Explore scenic routes, misty landscapes, 
-                and vibrant coffee plantations. With guided rides and exciting pit stops, this trip promises the perfect 
-                blend of thrill and serenity. Join us for an unforgettable biking experience!
+                Gear up for an adventurous ride to the lush hills of Coorg!
+                Explore scenic routes, misty landscapes, and vibrant coffee
+                plantations. With guided rides and exciting pit stops, this trip
+                promises the perfect blend of thrill and serenity. Join us for
+                an unforgettable biking experience!
               </p>
 
               <div className="grid grid-cols-2 gap-4">
@@ -98,7 +106,10 @@ export function TripsContent() {
 
               <div className="flex items-center justify-between pt-4">
                 <div className="space-y-1">
-                  <div className="text-2xl font-bold">Rs. 7,999 <span className="text-sm font-normal">per adult</span></div>
+                  <div className="text-2xl font-bold">
+                    Rs. 7,999{" "}
+                    <span className="text-sm font-normal">per adult</span>
+                  </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span>12,444 viewing</span>
                     <span>04/12 filled</span>
@@ -106,7 +117,9 @@ export function TripsContent() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline">View More</Button>
-                  <Button className="bg-orange-500 hover:bg-orange-600">Book Now</Button>
+                  <Button className="bg-orange-500 hover:bg-orange-600">
+                    Book Now
+                  </Button>
                 </div>
               </div>
             </div>
@@ -114,6 +127,5 @@ export function TripsContent() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
-

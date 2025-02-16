@@ -1,36 +1,52 @@
-import Link from "next/link";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { Bike, Calendar, Heart, Users } from "lucide-react";
+import {
+  BadgePlus,
+  Bike,
+  BookOpen,
+  Cake,
+  Calendar,
+  MapPin,
+  User,
+} from "lucide-react";
 
-const LeftMenu = () => {
+function LeftMenu({
+  dob,
+  location,
+  gender,
+  createdAt,
+}: {
+  dob: string;
+  location: string;
+  gender: string;
+  createdAt: string;
+}) {
   return (
-    <div className="w-[30rem]">
+    <div className="w-[30rem] flex gap-4 flex-col">
       <Card className="shadow-md">
         <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <p className="font-medium ">About Me</p>
+          <div className="flex flex-col items-start gap-4">
+            <p className="font-semibold">About Me</p>
+            <div className="flex flex-col gap-6">
+              <p className="flex gap-4">
+                <User />
+                {gender.slice(0, 1).toUpperCase() + gender.slice(1)}
+              </p>
+              <p className="flex gap-4">
+                <Cake /> DOB: {dob}
+              </p>
+              <p className="flex gap-4">
+                <MapPin /> From: {location}
+              </p>
+              <p className="flex gap-4">
+                <BadgePlus /> Joined: {createdAt}
+              </p>
+            </div>
           </div>
         </CardHeader>
-        <CardContent className="pb-3">
-          <nav className="space-y-1">
-            <Link href={`/profile/${"turboo"}`}>
-              <Button variant="ghost" className="w-full justify-start gap-2">
-                {/* <Heart className="h-5 w-5 text-orange-500" /> */}
-                <Calendar className="h-5 w-5 text-orange-500" />
-                Events
-              </Button>
-            </Link>
-            <Button variant="ghost" className="w-full justify-start gap-2">
-              {/* <Users className="h-5 w-5 text-orange-500" /> */}
-              <Bike className="h-5 w-5 text-orange-500" />
-              Trips
-            </Button>
-          </nav>
-        </CardContent>
       </Card>
     </div>
   );
-};
+}
 
 export default LeftMenu;

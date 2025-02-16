@@ -12,36 +12,53 @@ interface Props {
 function PostLike({ id, userId }: Props) {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
-  useEffect(() => {
-    fetchLikes();
-  }, [liked]);
-  useEffect(() => {
-    fetchLikes();
-  }, []);
+  const [loading, setLoading] = useState(false);
 
-  const fetchLikes = async () => {
-    const likesResponse = await axios.get(`/api/post/like?postId=${id}`);
-    const likes = likesResponse.data.likes;
-    setLikes(likes.length || 0);
-    const userIds: string[] = likes.map((like: { userId: string }) => like.userId);
-    setLiked(userIds.includes(userId));
-  };
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const likesResponse = await axios.get(`/api/post/like?postId=${id}`);
+        const likesData = likesResponse.data.likes || [];
+        setLikes(likesData.length);
+        setLiked(
+          likesData.some((like: { userId: string }) => like.userId === userId)
+        );
+      } catch (error) {
+        console.log("Error fetching likes:", error);
+      }
+    };
+
+    fetchLikes();
+  }, [id, userId, liked]);
 
   const handleLike = async () => {
+    if (loading) return;
+
+    setLoading(true);
     try {
       const res = await axios.post("/api/post/like", {
         postId: id,
         userId: userId,
       });
+
       if (res.status === 200) {
-        setLiked(!liked);
+        setLiked((prev) => !prev);
       }
     } catch (error) {
       console.log("Error liking post:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <Button variant="ghost" size="sm" className="gap-2" onClick={handleLike}>
+    <Button
+      variant="ghost"
+      size="sm"
+      className="gap-2"
+      onClick={handleLike}
+      disabled={loading}
+    >
       {liked ? (
         <div className="mx-[2px]">❤️</div>
       ) : (

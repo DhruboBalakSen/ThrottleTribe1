@@ -11,14 +11,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode,
+  modal: React.ReactNode;
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="bg-gray-50">
         <body className={inter.className}>
-          <div className=" max-h-full bg-gray-50 select-none">{children}</div>
+          <div className=" max-h-full bg-gray-50 select-none">
+            {modal}{children}</div>
         </body>
       </html>
     </ClerkProvider>
