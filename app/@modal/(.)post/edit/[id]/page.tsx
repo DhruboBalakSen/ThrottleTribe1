@@ -1,9 +1,5 @@
 // "use client";
-import { Header } from "@/components/main/header";
 import PostEdit from "@/components/main/postEdit";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { getPostById, getUserDetails } from "@/lib/queries"
 
 async function Page({

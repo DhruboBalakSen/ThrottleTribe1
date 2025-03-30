@@ -6,7 +6,5 @@ interface PostParams {
 }
 
 type UserProfileProps = {
-
   username: { username: string };
-
 };

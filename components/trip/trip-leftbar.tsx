@@ -2,31 +2,37 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
-import { MapPin } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { useState } from "react";
-
-interface TripFilters {
-  location?: string;
-  dateRange?: {
-    from: Date | undefined;
-    to: Date | undefined;
-  };
-  activities: string[];
-  amenities: string[];
-}
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
+import { Slider } from "@/components/ui/slider";
 
 export function TripsLeftbar() {
-  const [filters, setFilters] = useState<TripFilters>({
-    location: "",
-    dateRange: {
-      from: undefined,
-      to: undefined,
-    },
-    activities: [],
-    amenities: [],
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: undefined,
+    to: undefined,
   });
+  const [priceRange, setPriceRange] = useState([5000]);
+
+  const handleClear = () => {
+    setLocation("");
+    setDate({ from: undefined, to: undefined });
+    setPriceRange([5000]);
+  };
+
+  const handleApply = () => {
+    console.log("Filters applied:", {
+      location,
+      date,
+      priceRange,
+    });
+  };
+
   return (
     <div className="hidden lg:flex flex-col gap-6 w-[330px]">
       <Card>
@@ -40,69 +46,72 @@ export function TripsLeftbar() {
           <div>
             <p className="text-sm font-medium mb-2">Apply Filters</p>
             <div className="relative">
-              <MapPin className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search location" className="pl-8" />
+              <Input
+                placeholder="Search location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                
+              />
             </div>
           </div>
 
           <div>
             <p className="text-sm font-medium mb-2">Select Dates</p>
-            <Calendar mode="range" className="rounded-md border" />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="date"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal flex items-center gap-2",
+                    !date?.from && "text-muted-foreground"
+                  )}
+                >
+                  {date?.from ? (
+                    date.to ? (
+                      <>
+                        {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
+                      </>
+                    ) : (
+                      format(date.from, "LLL dd, y")
+                    )
+                  ) : (
+                    <span className="text-muted-foreground">Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  selected={date}
+                  onSelect={setDate}
+                  numberOfMonths={2}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div>
-            <p className="text-sm font-medium mb-2">Select Activities</p>
-            <div className="space-y-2">
-              {["Trekking", "Camping", "Sightseeing", "Rockclimbing"].map(
-                (activity) => (
-                  <div key={activity} className="flex items-center space-x-2">
-                    <Checkbox id={activity.toLowerCase()} />
-                    <label
-                      htmlFor={activity.toLowerCase()}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {activity}
-                    </label>
-                  </div>
-                )
-              )}
-              <Button
-                variant="link"
-                className="text-xs text-muted-foreground px-0"
-              >
-                see more
-              </Button>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium mb-2">Select Amenities</p>
-            <div className="space-y-2">
-              {["Transfer", "Meals", "Stay", "Rockclimbing"].map((amenity) => (
-                <div key={amenity} className="flex items-center space-x-2">
-                  <Checkbox id={amenity.toLowerCase()} />
-                  <label
-                    htmlFor={amenity.toLowerCase()}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {amenity}
-                  </label>
-                </div>
-              ))}
-              <Button
-                variant="link"
-                className="text-xs text-muted-foreground px-0"
-              >
-                see more
-              </Button>
+            <p className="text-sm font-medium mb-2">Select Price Range (₹)</p>
+            <Slider
+              min={0}
+              max={15000}
+              step={50}
+              value={priceRange}
+              onValueChange={setPriceRange}
+            />
+            <div className="flex justify-between text-sm mt-2">
+              <span>Free</span>
+              <span>₹{priceRange[0]}</span>
             </div>
           </div>
 
           <div className="flex gap-2">
-            <Button variant="outline" className="flex-1">
+            <Button variant="outline" className="flex-1" onClick={handleClear}>
               Clear
             </Button>
-            <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
+            <Button className="flex-1 bg-orange-500 hover:bg-orange-600" onClick={handleApply}>
               Apply
             </Button>
           </div>
