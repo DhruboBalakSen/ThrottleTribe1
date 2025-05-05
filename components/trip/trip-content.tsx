@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -9,9 +10,67 @@ import {
 } from "@/components/ui/select";
 import { Edit3, MoreVertical } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 export function TripsContent() {
+  const primaryEmail = "user@example.com";
   
+  const handlePurchase = async () => {
+    try{
+      const orderResponse = await fetch('/api/create-razorpay-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const orderData = await orderResponse.json();
+
+      if(!orderResponse.ok){
+        throw new Error(orderData.error || 'Failed to create order')
+      }
+      const razorpay = new window.Razorpay({
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        order_id: orderData.orderId,
+        amount: orderData.amount,
+        current: orderData.currency,
+        name: 'Throttle Tribe',
+        description: 'Amount 7999',
+        image: '/logo.png',
+        handler: async function (response: any){
+          const subscription = await fetch('/api/handle-payment-success', {
+            method: 'POST',
+            headers: {
+              'Content-Type' : "application/json"
+            },
+            body: JSON.stringify({
+              userEmail: primaryEmail,
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id,
+              signature: response.razorpay_signature,
+            }),
+          });
+          const subscriptionData = await subscription.json()
+
+          if(!subscription.ok){
+            throw new Error(subscriptionData.error || 'Error Try again later');
+          }
+          toast.success('Payment Success');
+        },
+
+      })
+      razorpay.open()
+    }catch(error){
+      console.log('error', error);
+      toast.error('Try again Later')
+    }
+  }
+
   return (
     <div className="flex-1">
       <div className="flex items-center justify-between mb-6">
@@ -122,7 +181,7 @@ export function TripsContent() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline">View More</Button>
-                  <Button className="bg-orange-500 hover:bg-orange-600">
+                  <Button onClick={() => handlePurchase()} className="bg-orange-500 hover:bg-orange-600">
                     Book Now
                   </Button>
                 </div>
