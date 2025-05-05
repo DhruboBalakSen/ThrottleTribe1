@@ -19,6 +19,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="bg-gray-50">
+        <head>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        </head>
         <body className={inter.className}>
           <div className=" max-h-full bg-gray-50 select-none">
             {modal}{children}</div>
