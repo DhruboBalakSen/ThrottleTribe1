@@ -38,10 +38,12 @@ export async function LeftSidebar() {
                 My Profile
               </Button>
             </Link>
+            <Link href={`/trips/mytrip`}>
             <Button variant="ghost" className="w-full justify-start gap-2 transition-transform hover:scale-[1.02] hover:shadow-xl">
               <Bike className="h-5 w-5 text-orange-500" />
               My Trips
             </Button>
+            </Link>
             <Link href={`/blog/myblogs/${currentuser?.username}`}>
               <Button variant="ghost" className="w-full justify-start gap-2 transition-transform hover:scale-[1.02] hover:shadow-xl">
                 <BookOpen className="h-5 w-5 text-orange-500" />
@@ -75,7 +77,7 @@ export async function LeftSidebar() {
                     </p>
                 </Link>
                   </div>
-                <Button size="sm" className="bg-orange-500 hover:bg-orange-600 justify-end">Follow</Button>
+                {/* <Button size="sm" className="bg-orange-500 hover:bg-orange-600 justify-end">Follow</Button> */}
               </div>
             ))}
           </div>

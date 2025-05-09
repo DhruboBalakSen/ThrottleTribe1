@@ -1,6 +1,6 @@
-import { Header } from "@/components/main/header"
-import { TripsContent } from "@/components/trip/trip-content"
-import { TripsLeftbar } from "@/components/trip/trip-leftbar"
+import { Header } from "@/components/main/header";
+import { TripsContent } from "@/components/trip/trip-content";
+import { TripsLeftbar } from "@/components/trip/trip-leftbar";
 
 export default function TripsPage() {
   return (
@@ -13,7 +13,5 @@ export default function TripsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
-
- 

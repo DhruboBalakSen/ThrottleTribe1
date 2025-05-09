@@ -1,0 +1,72 @@
+START
+
+IMPORT necessary modules (Next.js, Prisma, Clerk authentication, Cloudinary, TailwindCSS)
+
+DEFINE async function handle user authentication:
+    - Initialize Clerk authentication
+    - IF user is authenticated:
+        RETURN user details
+    - ELSE:
+        RETURN Unauthorized Response
+
+DEFINE async function handle POST creation:
+    - Authenticate user
+    - IF authentication fails:
+        RETURN Unauthorized Response
+    
+    - PARSE request body:
+        - Extract post content, image URL, and userId
+
+    - IF content or userId is missing:
+        RETURN Bad Request Response
+
+    - UPLOAD image to Cloudinary (IF provided)
+
+    - STORE post in the database
+    - RETURN success response with post details
+
+DEFINE async function handle BLOG creation:
+    - Authenticate user
+    - IF authentication fails:
+        RETURN Unauthorized Response
+    
+    - PARSE request body:
+        - Extract blog content, image URL, and userId
+
+    - IF content or userId is missing:
+        RETURN Bad Request Response
+
+    - UPLOAD image to Cloudinary (IF provided)
+
+    - STORE blog in the database
+    - RETURN success response with blog details
+
+DEFINE async function handle Trip Planning:
+    - Authenticate user
+    - IF authentication fails:
+        RETURN Unauthorized Response
+    
+    - PARSE request body:
+        - Extract trip name, start location, destination, waypoints, trip date
+
+    - IF required fields are missing:
+        RETURN Bad Request Response
+
+    - STORE trip details in the database
+    - RETURN success response with trip details
+
+DEFINE async function handle user interactions (likes, comments):
+    - Authenticate user
+    - IF authentication fails:
+        RETURN Unauthorized Response
+    
+    - PARSE request body:
+        - Extract postId, comment text (IF applicable), userId
+
+    - IF required fields are missing:
+        RETURN Bad Request Response
+
+    - UPDATE database with like or comment
+    - RETURN success response
+
+END

@@ -24,6 +24,9 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -47,6 +50,8 @@ const formSchema = z
   });
 
 export default function TripForm() {
+  const { user } = useUser();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,9 +67,10 @@ export default function TripForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("hi");
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const tags = values.tags?.split(",").map((item) => item.trim()) || [""];
+    await axios.post("/api/trips/create", {...values, userId : user?.username, tags : tags})
+    router.push('/trips')
   }
 
   return (
@@ -197,6 +203,42 @@ export default function TripForm() {
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter price in INR"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="slots"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Slots</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter number of slots"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="tags"

@@ -5,7 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, MapPin } from "lucide-react";
 import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
@@ -26,7 +30,7 @@ export function TripsLeftbar() {
   };
 
   const handleApply = () => {
-    console.log("Filters applied:", {
+    console.log({
       location,
       date,
       priceRange,
@@ -50,7 +54,6 @@ export function TripsLeftbar() {
                 placeholder="Search location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                
               />
             </div>
           </div>
@@ -70,7 +73,8 @@ export function TripsLeftbar() {
                   {date?.from ? (
                     date.to ? (
                       <>
-                        {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
+                        {format(date.from, "LLL dd, y")} -{" "}
+                        {format(date.to, "LLL dd, y")}
                       </>
                     ) : (
                       format(date.from, "LLL dd, y")
@@ -111,7 +115,10 @@ export function TripsLeftbar() {
             <Button variant="outline" className="flex-1" onClick={handleClear}>
               Clear
             </Button>
-            <Button className="flex-1 bg-orange-500 hover:bg-orange-600" onClick={handleApply}>
+            <Button
+              className="flex-1 bg-orange-500 hover:bg-orange-600"
+              onClick={handleApply}
+            >
               Apply
             </Button>
           </div>

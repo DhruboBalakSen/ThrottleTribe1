@@ -9,10 +9,10 @@ export default async function Home() {
     <div className="bg-gray-50">
       <Header />
       <main className="container mx-auto px-4 py-6">
-        <div className="flex gap-2">
+        <div className="flex gap-4">
           <LeftSidebar />
           <Feed />
-          <RightSidebar />
+          {/* <RightSidebar /> */}
         </div>
       </main>
     </div>

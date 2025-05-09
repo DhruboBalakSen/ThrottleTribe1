@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,18 +17,18 @@ model User {
   gender         String
   dob            String
   location       String
-  createdAt      DateTime      @default(now())
   profilePicture String?
-  posts          Post[]
-  comments       Comment[]
-  likes          Like[]
-  trips          Trips[]
-  blogs          Blogs[]
-  blogLikes      BlogLikes[]
+  createdAt      DateTime      @default(now())
   blogComment    BlogComment[]
-
-  followers Follow[] @relation("FollowedBy")
-  following Follow[] @relation("Following")
+  blogLikes      BlogLikes[]
+  blogs          Blogs[]
+  comments       Comment[]
+  following      Follow[]      @relation("Following")
+  followers      Follow[]      @relation("FollowedBy")
+  likes          Like[]
+  posts          Post[]
+  trips          Trips[]
+  bookedTrips    BookedTrips[]
 }
 
 model Post {
@@ -43,9 +37,9 @@ model Post {
   content   String?
   imageUrl  String?
   createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [username])
   comments  Comment[]
   likes     Like[]
+  user      User      @relation(fields: [userId], references: [username])
 }
 
 model Comment {
@@ -54,8 +48,8 @@ model Comment {
   postId      Int
   commentText String
   createdAt   DateTime @default(now())
-  user        User     @relation(fields: [userId], references: [username])
   post        Post     @relation(fields: [postId], references: [id])
+  user        User     @relation(fields: [userId], references: [username])
 }
 
 model Like {
@@ -63,8 +57,8 @@ model Like {
   userId    String
   postId    Int
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [username])
   post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [username])
 }
 
 model Follow {
@@ -72,22 +66,27 @@ model Follow {
   followerId  String
   followingId String
   createdAt   DateTime @default(now())
+  follower    User     @relation("Following", fields: [followerId], references: [username])
+  following   User     @relation("FollowedBy", fields: [followingId], references: [username])
 
-  follower  User @relation("Following", fields: [followerId], references: [username])
-  following User @relation("FollowedBy", fields: [followingId], references: [username])
-
-  @@unique([followerId, followingId]) // Ensures a user cannot follow the same person twice
+  @@unique([followerId, followingId])
 }
 
 model Trips {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  title     String
   userId    String
   itinerary String
-  amenities String
-  start     String
-  end       String
   cost      String
-  user      User   @relation(fields: [userId], references: [username])
+  contact   String
+  createdAt DateTime @default(now())
+  location  String
+  slots     Int
+  tags      String[]
+  start     DateTime
+  end       DateTime
+  user      User     @relation(fields: [userId], references: [username])
+  bookedTrips BookedTrips[]
 }
 
 model Blogs {
@@ -98,8 +97,8 @@ model Blogs {
   createdAt DateTime      @default(now())
   tags      String[]
   imageUrl  String
-  likes     BlogLikes[]
   comments  BlogComment[]
+  likes     BlogLikes[]
   user      User          @relation(fields: [author], references: [username])
 }
 
@@ -108,8 +107,8 @@ model BlogLikes {
   userId    String
   blogId    Int
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [username])
   blog      Blogs    @relation(fields: [blogId], references: [id])
+  user      User     @relation(fields: [userId], references: [username])
 }
 
 model BlogComment {
@@ -118,6 +117,15 @@ model BlogComment {
   blogId      Int
   commentText String
   createdAt   DateTime @default(now())
-  user        User     @relation(fields: [userId], references: [username])
   blog        Blogs    @relation(fields: [blogId], references: [id])
+  user        User     @relation(fields: [userId], references: [username])
+}
+
+model BookedTrips {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  tripId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [username])
+  trips     Trips    @relation(fields: [tripId], references: [id])
 }

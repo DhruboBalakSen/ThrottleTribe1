@@ -373,34 +373,33 @@ export const getBlogByAuthor = async (author: string) => {
   } catch (error) {}
 };
 
-
-export const createBlogComment = async (id:number,userId: string,commentText:string) => {
+export const createBlogComment = async (
+  id: number,
+  userId: string,
+  commentText: string
+) => {
   try {
     const comment = await prisma.blogComment.create({
-      data :{
-        blogId:id,
-        userId : userId,
-        commentText : commentText
-      }
-    })
+      data: {
+        blogId: id,
+        userId: userId,
+        commentText: commentText,
+      },
+    });
     return comment;
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
-export const getBlogComments = async (id:number) =>{
+export const getBlogComments = async (id: number) => {
   try {
     const comments = prisma.blogComment.findMany({
-      where :{
-        blogId:id
-      }
-    })
+      where: {
+        blogId: id,
+      },
+    });
     return comments;
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
 export const toggleBlogLike = async (blogId: number, userId: string) => {
   try {
@@ -446,3 +445,46 @@ export const getBlogLikes = async (blogId: number) => {
     return "Unable to get like count";
   }
 };
+
+export const createTrip = async (data: {
+  title: string;
+  userId: string;
+  location: string;
+  slots: number;
+  tags: string[];
+  itinerary: string;
+  start: Date;
+  end: Date;
+  cost: string;
+  contact: string;
+}) => {
+  console.log("from query", data);
+  try {
+    const trip = await prisma.trips.create({
+      data: { ...data },
+    });
+    console.log(trip);
+    return trip;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchTrips = async () => {
+  const trips = await prisma.trips.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return trips;
+};
+
+
+export const getTripById = async(id : number) =>{
+  const trip = await prisma.trips.findUnique({
+    where: {
+      id : id
+    },
+  });
+  return trip
+}
