@@ -1,20 +1,16 @@
 // "use client";
 import PostEdit from "@/components/main/postEdit";
-import { getPostById, getUserDetails } from "@/lib/queries"
+import { getPostById, getUserDetails } from "@/lib/queries";
 
-async function Page({
-  params,
-}: {
-  params: Promise<{ id: number }>
-}) {
-  const id  = Number((await params).id);
+async function Page({ params }: { params: Promise<{ id: number }> }) {
+  const { id } = await params;
   const post = await getPostById(id);
-  const user = post && await getUserDetails(post.userId);
+  const user = post && (await getUserDetails(post.userId));
   return (
     <>
-      <PostEdit post={post} user={user} />
+      {post && user && <PostEdit post={post} user={user} />}
     </>
-  )
+  );
 }
 
-export default Page
+export default Page;

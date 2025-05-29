@@ -58,7 +58,6 @@ export function BlogPostForm() {
     const imageUrl = ImageUrl;
     const tags = values.tags?.split(",").map((item) => item.trim()) || [""];
 
-    console.log(author, title, content, imageUrl, tags);
     try {
       const res = await axios.post("/api/blog", {
         author: author,

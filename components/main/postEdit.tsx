@@ -9,18 +9,18 @@ import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 
 interface Post {
-  id: string;
-  content: string;
-  imageUrl?: string;
+  id: number;
+  content: string | null;
+  imageUrl: string | null;
 }
 
 interface User {
-  profilePicture?: string;
+  profilePicture: string | null;
   name: string;
   username: string;
 }
 
-function PostEdit({ post, user }: { post: Post; user: User }) {
+function PostEdit({ post, user }: { post: Post; user: User}) {
   const [content, setContent] = useState(post?.content || "");
   const router = useRouter();
   const handleCancel = () => {

@@ -18,7 +18,7 @@ async function Page({
     <>
     <Header />
     <div className="flex-1 max-w-2xl mx-auto my-20">
-      <PostEdit post={post} user={user} />
+      {post && user && <PostEdit post={post} user={user} />}
     </div>
     </>
   )

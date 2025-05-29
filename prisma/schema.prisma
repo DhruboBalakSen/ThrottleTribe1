@@ -73,19 +73,21 @@ model Follow {
 }
 
 model Trips {
-  id        Int      @id @default(autoincrement())
-  title     String
-  userId    String
-  itinerary String
-  cost      String
-  contact   String
-  createdAt DateTime @default(now())
-  location  String
-  slots     Int
-  tags      String[]
-  start     DateTime
-  end       DateTime
-  user      User     @relation(fields: [userId], references: [username])
+  id          Int           @id @default(autoincrement())
+  title       String
+  userId      String
+  itinerary   String
+  cost        String
+  contact     String
+  createdAt   DateTime      @default(now())
+  source      String
+  destination String
+  imageUrl    String
+  slots       Int
+  tags        String[]
+  start       DateTime
+  end         DateTime
+  user        User          @relation(fields: [userId], references: [username])
   bookedTrips BookedTrips[]
 }
 

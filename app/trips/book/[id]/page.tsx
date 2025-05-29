@@ -1,25 +1,27 @@
 "use client";
 import { Header } from "@/components/main/header";
 import { Button } from "@/components/ui/button";
-import { getTripById, getUserDetails } from "@/lib/queries";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { MoreVertical } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Trip {
-  id: number;
-  title: string;
-  userId: string;
-  itinerary: string;
-  cost: string;
-  contact: string;
+  id: Number;
+  title: String;
+  userId: String;
+  itinerary: String;
+  cost: String;
+  contact: String;
   createdAt: Date;
-  location: string;
-  slots: number;
-  tags: string[];
+  imageUrl: string;
+  source: String;
+  destination: String;
+  slots: Number;
+  tags: String[];
   start: Date;
   end: Date;
 }
@@ -32,12 +34,16 @@ declare global {
 const Page = () => {
   const params = useParams();
   const [trip, setTrip] = useState<Trip | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchTrip = async () => {
+      setLoading(true);
       const res = await axios.post("/api/trips/fetch", {
         id: params.id,
       });
       setTrip(res.data.trip);
+      setLoading(false);
     };
     fetchTrip();
   }, []);
@@ -83,7 +89,9 @@ const Page = () => {
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Throttle Tribe",
-        description: `Trip to ${trip?.location || "your selected destination"}`,
+        description: `Trip to ${
+          trip?.destination || "your selected destination"
+        }`,
         image: "/logo.png",
         handler: async function (response: any) {
           await fetch("/api/trips/book", {
@@ -113,6 +121,14 @@ const Page = () => {
     }
   };
 
+  if(loading){
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="">
       <Header />
@@ -121,11 +137,16 @@ const Page = () => {
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <img
-                src={user?.imageUrl || "default_pfp.jpg"}
+              <Image
+                src={
+                  user?.imageUrl?.trim() ? user.imageUrl : "/default_pfp.jpg"
+                }
+                width={40}
+                height={40}
                 alt="Profile"
                 className="h-10 w-10 rounded-full"
               />
+
               <div>
                 <p className="font-medium">{trip?.userId}</p>
                 <p className="text-sm text-muted-foreground">
@@ -139,8 +160,10 @@ const Page = () => {
           </div>
 
           <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
-            <img
-              src="https://content3.jdmagicbox.com/comp/coorg/i8/9999p8272.8272.170314174644.g3i8/catalogue/top-gear-bike-rentals-kohinoor-road-coorg-bike-on-rent-yamaha-csp580ewh9.jpg"
+            <Image
+              src={trip?.imageUrl || "/default_trip.jpg"}
+              width={1920}
+              height={1080}
               alt="Trip"
               className="w-full h-full object-cover"
             />
@@ -189,7 +212,9 @@ const Page = () => {
                   <span className="text-sm font-normal">per adult</span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>{2}/{trip?.slots as number} filled</span>
+                  <span>
+                    {2}/{trip?.slots as number} filled
+                  </span>
                 </div>
               </div>
               <div className="flex gap-2">

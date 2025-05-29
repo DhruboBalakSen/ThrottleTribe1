@@ -5,8 +5,8 @@ import { getBlogByAuthor } from "@/lib/queries";
 import Link from "next/link";
 import React from "react";
 
-const Page = async ({ params }: { params: { author: string } }) => {
-  const author = (await params).author as string;
+const Page = async ({ params }: { params: Promise<{ author: string }> }) => {
+  const {author} = await params;
   const blogs = await getBlogByAuthor(author);
   return (
     <div>

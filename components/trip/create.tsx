@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useState } from "react";
+import { Autocomplete } from "@react-google-maps/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -27,6 +29,8 @@ import { format } from "date-fns";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
+import { Label } from "../ui/label";
 
 const formSchema = z
   .object({
@@ -41,7 +45,8 @@ const formSchema = z
     price: z.string().min(1, { message: "Price is required." }),
     slots: z.string().min(1, { message: "Number of slots is required." }),
     contact: z.string().min(5, { message: "Contact info is required." }),
-    location: z.string().min(3, { message: "Location is required." }),
+    source: z.string().min(3, { message: "Source is required." }),
+    destination: z.string().min(3, { message: "Destination is required." }),
     tags: z.string().optional(),
   })
   .refine((data) => data.endDate >= data.startDate, {
@@ -52,6 +57,8 @@ const formSchema = z
 export default function TripForm() {
   const { user } = useUser();
   const router = useRouter();
+  const [ImageUrl, setImageUrl] = useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,21 +67,87 @@ export default function TripForm() {
       price: "",
       slots: "",
       contact: "",
-      location: "",
+      source: "",
+      destination: "",
       tags: "",
       startDate: undefined,
       endDate: undefined,
     },
   });
 
+  const handleFileInput = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      console.log(event.target.files);
+      const files = Array.from(event.target.files);
+      files.map((file) => uploadToServer(file));
+    }
+  };
+
+  const uploadToServer = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Upload successful! ");
+        setImageUrl(data.url);
+        return data.url;
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (error) {
+      console.log("Upload failed");
+      return null;
+    }
+  };
+
+  const originRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const destinationRef = useRef<google.maps.places.Autocomplete | null>(null);
+
+  const handleOriginLoad = (autocomplete: google.maps.places.Autocomplete) => {
+    originRef.current = autocomplete;
+  };
+
+  const handleDestinationLoad = (
+    autocomplete: google.maps.places.Autocomplete
+  ) => {
+    destinationRef.current = autocomplete;
+  };
+
+  const handleOriginChange = () => {
+    const place = originRef.current?.getPlace();
+    if (place?.name) {
+      form.setValue("source", place?.name);
+    }
+  };
+
+  const handleDestinationChange = () => {
+    const place = destinationRef.current?.getPlace();
+    if (place?.name) {
+      form.setValue("destination", place?.name);
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const tags = values.tags?.split(",").map((item) => item.trim()) || [""];
-    await axios.post("/api/trips/create", {...values, userId : user?.username, tags : tags})
-    router.push('/trips')
+    await axios.post("/api/trips/create", {
+      ...values,
+      userId: user?.username,
+      tags: tags,
+      imageUrl: ImageUrl
+    });
+    router.push("/trips");
   }
 
   return (
     <Card className="w-full max-w-7xl mx-auto">
+      <Toaster position="top-right" />
       <CardHeader>
         <CardTitle>Create an Event</CardTitle>
       </CardHeader>
@@ -94,6 +167,7 @@ export default function TripForm() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="description"
@@ -110,19 +184,62 @@ export default function TripForm() {
                 </FormItem>
               )}
             />
+            <div className="w-full items-center gap-2.5">
+              <Label>Image</Label>
+              <Input
+                id="Image"
+                type="file"
+                accept="image/*"
+                onChange={handleFileInput}
+              />
+            </div>
+
             <FormField
               control={form.control}
-              name="location"
+              name="source"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Start Location</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter event location" {...field} />
+                    <Autocomplete
+                      onLoad={handleOriginLoad}
+                      onPlaceChanged={handleOriginChange}
+                    >
+                      <Input
+                        placeholder="Enter event start location"
+                        {...field}
+                        value={form.watch("source")}
+                      />
+                    </Autocomplete>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="destination"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Location</FormLabel>
+                  <FormControl>
+                    <Autocomplete
+                      onLoad={handleDestinationLoad}
+                      onPlaceChanged={handleDestinationChange}
+                    >
+                      <Input
+                        placeholder="Enter event end location"
+                        {...field}
+                        value={form.watch("destination")}
+                      />
+                    </Autocomplete>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex flex-col sm:flex-row gap-4">
               <FormField
                 control={form.control}
@@ -163,6 +280,7 @@ export default function TripForm() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="endDate"
@@ -203,6 +321,7 @@ export default function TripForm() {
                 )}
               />
             </div>
+
             <FormField
               control={form.control}
               name="price"
@@ -255,6 +374,7 @@ export default function TripForm() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="contact"

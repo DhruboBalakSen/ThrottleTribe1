@@ -3,8 +3,8 @@ import { Header } from "@/components/main/header"
 import { getBlog, getUserDetails } from "@/lib/queries"
 
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const id = parseInt((await params).id, 10)
+export default async function Page({ params }: { params: Promise<{ id: number }> }) {
+  const {id}= await params
   const blog = await getBlog(id)
   const user = await getUserDetails(blog?.author as string);
 

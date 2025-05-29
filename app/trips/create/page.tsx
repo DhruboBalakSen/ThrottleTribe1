@@ -1,11 +1,14 @@
-import TripForm from "@/components/trip/create"
+"use client";
+import { LoadScript } from "@react-google-maps/api";
+import TripForm from "@/components/trip/create";// Adjust path
 
-const Page = () => {
+export default function Page() {
   return (
-    <div className='flex justify-center mt-20'>
-        <TripForm />
-    </div>
-  )
+    <LoadScript
+      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+      libraries={["places"]}
+    >
+      <TripForm />
+    </LoadScript>
+  );
 }
-
-export default Page

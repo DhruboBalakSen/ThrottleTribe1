@@ -449,7 +449,8 @@ export const getBlogLikes = async (blogId: number) => {
 export const createTrip = async (data: {
   title: string;
   userId: string;
-  location: string;
+  source: string;
+  destination: string;
   slots: number;
   tags: string[];
   itinerary: string;
@@ -457,6 +458,7 @@ export const createTrip = async (data: {
   end: Date;
   cost: string;
   contact: string;
+  imageUrl: string
 }) => {
   console.log("from query", data);
   try {

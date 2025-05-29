@@ -11,10 +11,12 @@ export async function POST(req: NextRequest) {
         cost: body.price,
         slots: Number(body.slots),
         contact: body.contact,
-        location: body.location,
+        source: body.source,
+        destination: body.destination,
         tags: body.tags,
         userId: body.userId,
-        itinerary: body.description
+        itinerary: body.description,
+        imageUrl: body.imageUrl
       }
       const trip = await createTrip(payload);
       return NextResponse.json({success:true});
