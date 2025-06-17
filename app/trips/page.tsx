@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/main/header";
 import { TripsContent } from "@/components/trip/trip-content";
 import { TripsLeftbar } from "@/components/trip/trip-leftbar";

@@ -329,15 +329,18 @@ export const getBlogs = async () => {
   try {
     const blogs = await prisma.blogs.findMany();
     return blogs;
-  } catch (error) {}
+  } catch (error) {
+    return []
+  }
 };
 export const getBlog = async (id: number) => {
   try {
-    const blog = await prisma.blogs.findFirst({
+    const blog = await prisma.blogs.findUnique({
       where: {
         id: id,
       },
     });
+    console.log(blog);
     return blog;
   } catch (error) {}
 };

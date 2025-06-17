@@ -28,13 +28,19 @@ const Trip = async ({ data }: { data: TripParams }) => {
   const booked = (await prisma.bookedTrips.findMany()).filter(
     (trip) => trip.tripId == data.id
   ).length;
+  console.log(
+    (await prisma.bookedTrips.findMany()).filter(
+      (trip) => trip.tripId == data.id
+    )
+  );
+  console.log(user?.profilePicture);
   return (
     <Card className="mb-6">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <img
-              src={user?.profilePicture || "default_pfp.jpg"}
+              src={user?.profilePicture || "/default_pfp.jpg"}
               alt="Profile"
               className="h-10 w-10 rounded-full"
             />
