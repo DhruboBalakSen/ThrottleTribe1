@@ -92,18 +92,23 @@ export const updatePost = async (id: number, content: string) => {
   }
 };
 
-export const deletePost = async (id: number) => {
-  try {
-    await prisma.post.delete({
-      where: {
-        id: id,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return "Unable to delete";
-  }
-};
+export async function deletePost(postId: number) {
+  // Delete likes first (because of foreign key constraint)
+  await prisma.like.deleteMany({
+    where: { postId },
+  });
+
+  // Delete comments
+  await prisma.comment.deleteMany({
+    where: { postId },
+  });
+
+  // Delete the post itself
+  await prisma.post.delete({
+    where: { id: postId },
+  });
+}
+
 
 export const updateBio = async (username: string, newBio: string) => {
   try {
@@ -330,7 +335,7 @@ export const getBlogs = async () => {
     const blogs = await prisma.blogs.findMany();
     return blogs;
   } catch (error) {
-    return []
+    return [];
   }
 };
 export const getBlog = async (id: number) => {
@@ -461,7 +466,7 @@ export const createTrip = async (data: {
   end: Date;
   cost: string;
   contact: string;
-  imageUrl: string
+  imageUrl: string;
 }) => {
   console.log("from query", data);
   try {
@@ -475,21 +480,65 @@ export const createTrip = async (data: {
   }
 };
 
-export const fetchTrips = async () => {
-  const trips = await prisma.trips.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+interface TripFilters {
+  location?: string;
+  start?: string;
+  end?: string;
+  price?: number | string;
+  sort?: string; // You missed this in your interface
+}
+
+interface TripWhere {
+  destination?: { contains: string; mode: "insensitive" };
+  start?: { gte: Date };
+  end?: { lte: Date };
+  cost?: { lte: string };
+}
+
+export async function fetchTrips(filters: TripFilters): Promise<any[]> {
+  const where: TripWhere = {};
+  let orderBy: any = { createdAt: "desc" }; // default to newest
+
+  // Handle filters
+  if (filters.location) {
+    where.destination = { contains: filters.location, mode: "insensitive" };
+  }
+  if (filters.start && filters.end) {
+    where.start = { gte: new Date(filters.start) };
+    where.end = { lte: new Date(filters.end) };
+  }
+  if (filters.price) {
+    where.cost = { lte: String(filters.price) };
+  }
+
+  // Handle sorting
+  if (filters.sort) {
+    switch (filters.sort) {
+      case "newest":
+        orderBy = { createdAt: "desc" };
+        break;
+      case "popular": // assuming 'bookings' is a sortable field
+        break;
+      case "price-low":
+        orderBy = { cost: "asc" };
+        break;
+      case "price-high":
+        orderBy = { cost: "desc" };
+        break;
+    }
+  }
+
+  return await prisma.trips.findMany({
+    where,
+    orderBy,
   });
-  return trips;
-};
+}
 
-
-export const getTripById = async(id : number) =>{
+export const getTripById = async (id: number) => {
   const trip = await prisma.trips.findUnique({
     where: {
-      id : id
+      id: id,
     },
   });
-  return trip
-}
+  return trip;
+};

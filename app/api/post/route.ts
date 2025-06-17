@@ -8,8 +8,7 @@ export async function POST(request: NextRequest) {
     const content = formData.get("content") as string;
     const imageUrl = formData.get("imageUrl") as string;
     const post = { userid: userId, content: content, imageUrl: imageUrl };
-    const result = createPost(post)
-    console.log(result)
+    await createPost(post)
     return NextResponse.json({message:"Post Created"},{status:200})
   } catch (error) {
     console.error("Unable to create post: ", error);

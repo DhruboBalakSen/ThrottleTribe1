@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     const { userId } = await req.json();
       const bookedTrips = await prisma.bookedTrips.findMany();
         const trips = bookedTrips.filter((trip) => trip.userId == userId)
-        console.log(trips);
         return NextResponse.json({ success: true, trips }, { status: 200 });
 
   } catch (error: unknown) {

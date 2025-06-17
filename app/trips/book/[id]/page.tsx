@@ -70,8 +70,6 @@ const Page = () => {
     });
   };
 
-  console.log(booked);
-
   const handleCheckout = async () => {
     const alreadyBooked = booked?.some((b) => b.userId === user?.username);
     console.log(user?.username, alreadyBooked);

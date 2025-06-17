@@ -1,5 +1,4 @@
 "use server";
-import { MoreVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { getUserDetails } from "@/lib/queries";
@@ -28,12 +27,6 @@ const Trip = async ({ data }: { data: TripParams }) => {
   const booked = (await prisma.bookedTrips.findMany()).filter(
     (trip) => trip.tripId == data.id
   ).length;
-  console.log(
-    (await prisma.bookedTrips.findMany()).filter(
-      (trip) => trip.tripId == data.id
-    )
-  );
-  console.log(user?.profilePicture);
   return (
     <Card className="mb-6">
       <CardContent className="p-6">
@@ -51,9 +44,9 @@ const Trip = async ({ data }: { data: TripParams }) => {
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon">
+          {/* <Button variant="ghost" size="icon">
             <MoreVertical className="h-4 w-4" />
-          </Button>
+          </Button> */}
         </div>
 
         <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">

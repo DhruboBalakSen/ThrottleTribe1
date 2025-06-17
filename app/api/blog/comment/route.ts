@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("Creating comment with:", { id, userId, commentText });
 
     await createBlogComment(id, userId, commentText);
 
@@ -33,7 +32,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const blogId = Number(searchParams.get("blogId"));
-    console.log(blogId);
     const comments = await getBlogComments(blogId);
     return NextResponse.json({ comments }, { status: 200 });
   } catch (error) {}

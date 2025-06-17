@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 import { Post } from "./post";
 import Create from "./create";
 import { getPosts } from "@/lib/queries";

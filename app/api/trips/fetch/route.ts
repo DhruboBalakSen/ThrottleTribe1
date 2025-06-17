@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({success: true, trip})
      }
 
-      const trips = await fetchTrips();
+      const trips = await fetchTrips({});
       return NextResponse.json({success: true, trips})
   } catch (error: unknown) {
     if (error instanceof Error) {
