@@ -68,6 +68,7 @@ function PostLike({ id, userId }: Props) {
       )}{" "}
       {likes > 0 ? likes : 0}
     </Button>
+    
   );
 }
 

@@ -1,5 +1,4 @@
 "use server";
-import { MoreVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { getUserDetails } from "@/lib/queries";
@@ -34,7 +33,7 @@ const Trip = async ({ data }: { data: TripParams }) => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <img
-              src={user?.profilePicture || "default_pfp.jpg"}
+              src={user?.profilePicture || "/default_pfp.jpg"}
               alt="Profile"
               className="h-10 w-10 rounded-full"
             />
@@ -45,9 +44,9 @@ const Trip = async ({ data }: { data: TripParams }) => {
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon">
+          {/* <Button variant="ghost" size="icon">
             <MoreVertical className="h-4 w-4" />
-          </Button>
+          </Button> */}
         </div>
 
         <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">

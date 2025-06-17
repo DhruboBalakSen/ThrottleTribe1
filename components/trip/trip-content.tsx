@@ -1,19 +1,16 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { fetchTrips } from "@/lib/queries";
 import { Edit3 } from "lucide-react";
 import Link from "next/link";
 import Trip from "./trip-card";
+import { SortSelect } from "./sort-select";
 
-export async function TripsContent() {
+interface TripsContentProps {
+  filters: any; // Replace 'any' with a more specific type if available
+}
 
-  const trips = await fetchTrips();
+export async function TripsContent({ filters }: TripsContentProps) {
+  const trips = await fetchTrips(filters);
 
   return (
     <div className="flex-1">
@@ -27,24 +24,11 @@ export async function TripsContent() {
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Sort by:</span>
-          <Select defaultValue="newest">
-            <SelectTrigger className="w-[140px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest Post</SelectItem>
-              <SelectItem value="popular">Most Popular</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
-            </SelectContent>
-          </Select>
+          <SortSelect />
         </div>
       </div>
 
-      {trips &&
-        trips?.map((trip) => (
-          <Trip key={trip.id} data={trip} />
-        ))}
+      {trips && trips?.map((trip) => <Trip key={trip.id} data={trip} />)}
     </div>
   );
 }

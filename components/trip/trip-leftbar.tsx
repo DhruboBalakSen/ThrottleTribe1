@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { Slider } from "@/components/ui/slider";
+import { useRouter } from "next/navigation";
 
 export function TripsLeftbar() {
   const [location, setLocation] = useState("");
@@ -23,18 +24,23 @@ export function TripsLeftbar() {
   });
   const [priceRange, setPriceRange] = useState([5000]);
 
+  const router = useRouter();
+
   const handleClear = () => {
-    setLocation("");
-    setDate({ from: undefined, to: undefined });
-    setPriceRange([5000]);
-  };
+  router.push("/trips");
+  setLocation("");
+  setDate({ from: undefined, to: undefined });
+  setPriceRange([5000]);
+};
 
   const handleApply = () => {
-    console.log({
-      location,
-      date,
-      priceRange,
-    });
+    const params = new URLSearchParams();
+    if (location) params.set("location", location);
+    if (date?.from) params.set("start", date.from.toISOString());
+    if (date?.to) params.set("end", date.to.toISOString());
+    if (priceRange[0]) params.set("price", priceRange[0].toString());
+
+    router.push(`/trips?${params.toString()}`);
   };
 
   return (

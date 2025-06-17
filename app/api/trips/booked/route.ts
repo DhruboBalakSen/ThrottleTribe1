@@ -1,13 +1,13 @@
-import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await req.json();
-      const bookedTrips = await prisma.bookedTrips.findMany();
-        const trips = bookedTrips.filter((trip) => trip.userId == userId)
-        return NextResponse.json({ success: true, trips }, { status: 200 });
-
+    const { id }: { id: number | string } = await req.json();
+    const trips = await prisma.bookedTrips.findMany({
+      where: { tripId: Number(id) },
+    });
+    return NextResponse.json({ success: true, data: trips });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error fetching user:", error.message);

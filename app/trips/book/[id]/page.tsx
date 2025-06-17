@@ -31,8 +31,16 @@ declare global {
   }
 }
 
+interface Booking {
+  id: number;
+  userId: string;
+  tripId: number;
+  createdAt: Date; // or `Date` if you parse it as a Date object
+}
+
 const Page = () => {
   const params = useParams();
+  const [booked, setBooked] = useState<Booking[] | null>(null);
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -42,6 +50,10 @@ const Page = () => {
       const res = await axios.post("/api/trips/fetch", {
         id: params.id,
       });
+      const bookedres = await axios.post("/api/trips/booked", {
+        id: params.id,
+      });
+      setBooked(bookedres.data.data);
       setTrip(res.data.trip);
       setLoading(false);
     };
@@ -59,6 +71,13 @@ const Page = () => {
   };
 
   const handleCheckout = async () => {
+    const alreadyBooked = booked?.some((b) => b.userId === user?.username);
+    console.log(user?.username, alreadyBooked);
+    if (alreadyBooked) {
+      toast.error("Trip Already Booked!");
+      return;
+    }
+
     const isLoaded = await loadRazorpayScript();
 
     if (!isLoaded) {
@@ -77,7 +96,6 @@ const Page = () => {
       });
 
       const orderData = await orderResponse.json();
-      console.log(orderData);
 
       if (!orderResponse.ok) {
         throw new Error(orderData.error || "Failed to create order");
@@ -121,7 +139,7 @@ const Page = () => {
     }
   };
 
-  if(loading){
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg text-muted-foreground">Loading...</p>
@@ -130,101 +148,101 @@ const Page = () => {
   }
 
   return (
-    <div className="">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <Toaster position="top-center" />
-      <div className="flex items-center justify-center min-h-screen p-10">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          {/* Trip Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
               <Image
                 src={
                   user?.imageUrl?.trim() ? user.imageUrl : "/default_pfp.jpg"
                 }
-                width={40}
-                height={40}
+                width={48}
+                height={48}
                 alt="Profile"
-                className="h-10 w-10 rounded-full"
+                className="h-12 w-12 rounded-full object-cover"
               />
-
               <div>
-                <p className="font-medium">{trip?.userId}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-semibold text-gray-800">{trip?.userId}</p>
+                <p className="text-sm text-gray-500">
                   {trip?.createdAt.toLocaleString()}
                 </p>
               </div>
             </div>
             <Button variant="ghost" size="icon">
-              <MoreVertical className="h-4 w-4" />
+              <MoreVertical className="h-5 w-5 text-gray-500" />
             </Button>
           </div>
 
-          <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
+          {/* Trip Image */}
+          <div className="rounded-lg overflow-hidden mb-6">
             <Image
               src={trip?.imageUrl || "/default_trip.jpg"}
-              width={1920}
-              height={1080}
+              width={1024}
+              height={500}
               alt="Trip"
-              className="w-full h-full object-cover"
+              className="w-full h-64 sm:h-96 object-cover"
             />
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold">{trip?.title}</h2>
-              <div className="flex gap-2">
+          {/* Trip Content */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800">
+                {trip?.title}
+              </h2>
+              <div className="flex flex-wrap gap-2 mt-2">
                 {trip?.tags.map((tag, idx) => (
                   <span
-                    className="px-2 py-1 text-xs bg-gray-100 rounded"
                     key={idx}
+                    className="px-3 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-full"
                   >
-                    {tag}
+                    #{tag}
                   </span>
                 ))}
               </div>
             </div>
 
-            <p className="text-muted-foreground">{trip?.itinerary}</p>
+            <p className="text-gray-600 leading-relaxed">{trip?.itinerary}</p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <span>🚐</span>
-                <span className="text-sm">Transfer included</span>
+                🚐 <span>Transfer included</span>
               </div>
               <div className="flex items-center gap-2">
-                <span>🍳</span>
-                <span className="text-sm">Breakfast Included</span>
+                🍳 <span>Breakfast included</span>
               </div>
               <div className="flex items-center gap-2">
-                <span>🏠</span>
-                <span className="text-sm">Stay Included</span>
+                🏠 <span>Stay included</span>
               </div>
               <div className="flex items-center gap-2">
-                <span>🗺️</span>
-                <span className="text-sm">Sightseeing</span>
+                🗺️ <span>Sightseeing</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4">
+            {/* Price and Booking */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-6 border-t mt-4">
               <div className="space-y-1">
-                <div className="text-2xl font-bold">
-                  {"Rs." + trip?.cost}{" "}
-                  <span className="text-sm font-normal">per adult</span>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>
-                    {2}/{trip?.slots as number} filled
+                <p className="text-3xl font-bold text-orange-600">
+                  Rs. {trip?.cost}
+                  <span className="text-base font-normal text-gray-500">
+                    {" "}
+                    per adult
                   </span>
-                </div>
+                </p>
+                <p className="text-sm text-gray-500">
+                  {booked?.length}/{trip?.slots?.toString()} slots filled
+                </p>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  className="bg-orange-500 hover:bg-orange-600"
-                  onClick={handleCheckout}
-                >
-                  Book Now
-                </Button>
-              </div>
+              <Button
+                className="mt-4 sm:mt-0 bg-orange-500 hover:bg-orange-600 px-6 py-2 text-white"
+                onClick={handleCheckout}
+              >
+                Book Now
+              </Button>
             </div>
           </div>
         </div>
